@@ -1,51 +1,82 @@
 # TrumanCode
 
-**TrumanCode** is a Codex/Claude skill for forcing AI work out of stale training-data assumptions and into the real world.
+**TrumanCode** 是一个 Codex/Claude 技能，强迫 AI 离开过时的训练数据假设，走进真实世界。
 
-It emphasizes always-on reality sync: read the current computer/session date, perform web research when freshness matters, inspect current open-source repositories, check official documentation, and ask rigorous Dario-style project questions before technical decisions are made.
+它强调始终在线的现实同步：读取当前计算机/会话日期，在时效性重要时执行多轮联网研究，检查当前开源仓库，查阅官方文档，并在技术决策前进行 Dario 式首席执行总监级严格审查。一旦触发持续生效，直到用户输入 `/goal` 退出。
 
-## Why This Exists
+## 为什么存在
 
-Modern AI assistants can sound confident while relying on old knowledge. TrumanCode gives the assistant a repeatable habit:
+现代 AI 助手可能依靠旧知识表现出自信。TrumanCode 给助手一个可重复的习惯：
 
-1. Read the current date instead of hardcoding a year.
-2. Look outside the model by default.
-3. Check current docs and real repositories.
-4. Compare what maintained projects actually do.
-5. Challenge weak product and architecture assumptions like a strict Anthropic executive reviewer.
-6. Ask for confirmation before pivoting, implementing, shipping, or closing.
+1. 读取当前日期，而非硬编码年份
+2. 默认向外看，而非向内猜
+3. 检查当前文档和真实仓库
+4. 比较多轮研究结果，非一次浅搜
+5. 像 Anthropic 最严格的执行总监一样挑战薄弱的产品和架构假设
+6. **强制使用 AskUserQuestion 工具进行确认闸门** —— 结束、转向、实现、交付前必须确认
+7. **代码三不准**：不准兼容、不准兜底、不准给屎山打补丁
+8. **持续生效**直到用户输入 `/goal` 退出
 
-The name comes from the "Truman" idea: leave the artificial studio and see the real world.
+名字来自"楚门"的概念：离开人工摄影棚，看见真实世界。
 
-## What It Is Good For
+## 核心行为
 
-- current-year framework, model, SDK, and component-library selection
-- open-source implementation research
-- product and architecture planning
-- AI agent/backend/frontend stack decisions
-- commercial-use license checks
-- comparing current open-source and closed-source options
-- reviewing whether a project direction is still valid
-- forcing a confirmation gate before major project transitions
-- pushing back on vague ideas until they become executable
+### 确认闸门
+结束对话前、变更方向前、开始写代码前、宣布完成前 —— **必须**使用 `AskUserQuestion` 工具向用户确认。纯文本"你确认吗？"不算。
 
-## Install
+### 联网研究协议
+默认执行多轮联网搜索（官方文档 → 真实仓库 → 生态对比）。可以向用户确认是否需要联网，但必须提议。
 
-Copy this folder into your Codex/Claude skills directory:
+### Dario 式首席执行总监审查
+对模糊词汇零容忍（"智能"、"丝滑"、"企业级"）。每轮至少 3-7 个高信号反问。持续追问直到项目清晰到路人可懂。
+
+### 代码准则
+- 简单可靠，不过度工程
+- 不准兼容旧版/假设未来
+- 不准在内部代码加兜底
+- 不准给坏代码贴创可贴
+- 默认不写注释
+
+### 代码执行流程
+- **执行前**：确认范围，一次确认全程执行
+- **执行中**：按计划一次性干完，不拆分 MVP、不中途停顿、不逐文件邀功
+- **执行后**：总结做了什么 → 问是否 Git 提交 → 问下一步（继续干/讨论/审查/结束）
+
+### 生命周期
+- **触发**：几乎任何实质性对话（项目、代码、技术、产品、方向）
+- **持续**：一旦触发，整轮对话持续生效
+- **退出**：唯一方式 `/goal` 命令
+
+## 适用场景
+
+- 当前年份的框架、模型、SDK、组件库选择
+- 开源实现研究
+- 产品和架构规划
+- AI agent/后端/前端技术栈决策
+- 商业使用许可证检查
+- 比较开源和闭源选项
+- 审查项目方向是否仍然有效
+- 在重大项目转换前强制确认闸门
+- 推回模糊想法直到可执行
+- 防止代码腐化和屎山积累
+
+## 安装
+
+将此文件夹复制到 Codex/Claude skills 目录：
 
 ```powershell
-Copy-Item -Recurse -Force .\trumancode C:\Users\ava\.agents\skills\trumancode
+Copy-Item -Recurse -Force .\Truman C:\Users\ava\.agents\skills\truman
 ```
 
-The required file is:
+必需文件：
 
 ```text
-trumancode/SKILL.md
+truman/SKILL.md
 ```
 
-## Usage Examples
+## 触发示例
 
-Prompts that should trigger this skill:
+以下提示应触发此技能：
 
 ```text
 帮我选现在最适合做 AI agent 后台的开源框架和组件库，要能商业化。
@@ -71,23 +102,24 @@ Prompts that should trigger this skill:
 这个方案今天还成立吗？帮我查最新代码库和官方文档。
 ```
 
-## Skill Behavior
-
-When triggered, TrumanCode asks the assistant to:
-
-- run multi-pass current research when freshness matters
-- read the current computer/session date as the freshness baseline
-- trigger broadly for substantive conversations, not only explicit "latest" requests
-- inspect official docs and real open-source repositories
-- compare ecosystem signals instead of trusting one source
-- challenge product, interaction, algorithm, and architecture assumptions with a strict, skeptical reviewer posture
-- produce compact project briefs and recommendation summaries
-- ask the user to confirm before major transitions
-
-## Repository Layout
+```text
+你觉得这个方向怎么样？
+```
 
 ```text
-trumancode/
+帮我在这个函数里加个兜底。
+```
+
+## 退出示例
+
+```text
+/goal
+```
+
+## 仓库布局
+
+```text
+Truman/
 ├── SKILL.md
 ├── README.md
 ├── LICENSE
@@ -95,16 +127,20 @@ trumancode/
     └── evals.json
 ```
 
-## Evaluation Prompts
+## 评估提示
 
-The `evals/evals.json` file contains starter test prompts for checking whether the skill:
+`evals/evals.json` 包含测试提示，检查技能是否：
 
-- pauses before vague implementation
-- asks for confirmation before completion
-- treats stack changes as a direction-change gate
-- requires current research for current-year technical choices
-- verifies that the assistant does not hardcode 2026 as a permanent rule
+- 在模糊实现请求前暂停并审查
+- 强制使用 AskUserQuestion 工具进行确认闸门
+- 将技术栈变更视为方向变更闸门
+- 对当前年份的技术选择要求多轮联网研究
+- 不硬编码年份，始终从环境读取日期
+- 推回模糊词汇，要求操作定义
+- 拒绝对内部代码加兜底/兼容层
+- 识别 `/goal` 命令并正确退出
+- 持续生效直到 `/goal`
 
-## License
+## 许可证
 
 MIT
