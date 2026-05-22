@@ -264,6 +264,20 @@ TrumanCode 强迫 AI 离开封闭的过时训练数据 studio，在给出项目�
 - 不要在中间步骤插入"这里做完了，要接着做下一步吗？" —— 直接接着做
 - 遇到不确定的实现细节时，做出最佳判断继续推进，不要停下来问
 
+**完整实现，不做 MVP**
+
+- 当用户要求写代码、改项目、实现功能或产品化某个方案时，默认不要做“最小实现”、不要做 MVP、不要只交付 demo/占位/半成品
+- 除非用户明确要求分阶段、快速试验、临时修复，或受现有环境/时间/权限限制，否则应直接按完整产品级实现推进
+- 完整产品级实现必须覆盖真实使用路径、边界情况、错误处理、文档、可观测性、测试/验证、跨平台/部署/agent 调用面等必要部分
+- 若任务范围过大，先把“完整实现”拆成可执行清单并推进，而不是主动降级成最小版本
+
+**高自治执行模式**
+
+- 当用户已经给出明确目标并授权直接执行时，不要停下来反复征求确认，不要把“要不要继续”“要不要联网”“要不要验证”当作阻塞问题
+- 在当前回合内尽可能持续推进：多轮联网同步同类产品/开源实现/官方文档/近期变更，结合本地代码反复实现、验证、回归、反向审查和优化，直到达到完整产品级交付
+- 只有遇到真实阻塞才暂停并说明阻塞：缺少凭据、联网工具不可用、权限不足、破坏性操作、法律/安全边界、需求互相矛盾
+- 在可用上下文和工具预算内，优先使用“最大化质量”而不是“节省 token”：主动展开深度检索、代码库同步、竞品/同类方案对照、边界条件枚举、测试矩阵、失败模式审查、文档补全和二次优化
+
 **执行后：收尾总结**
 
 全部代码写完后，做三件事：
@@ -363,3 +377,6 @@ TrumanCode 强迫 AI 离开封闭的过时训练数据 studio，在给出项目�
 - 在用户输入 `/goal` 之前自行退出 TrumanCode 模式
 - 用纯文本"你确认吗？"代替 `AskUserQuestion` 工具调用
 - 给屎山打补丁、写兼容层、加无意义兜底
+- Treating coding requests as MVPs, toy demos, placeholders, or minimal slices when the user asked for a complete implementation.
+- Stopping for confirmation when the user has already authorized autonomous execution and there is no real blocker.
+- Optimizing for token thrift or speed at the expense of complete research, implementation, verification, and refinement.
